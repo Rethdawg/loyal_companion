@@ -55,12 +55,14 @@ def convert_currency(from_cur, to_cur, amount):
     return money_dict
 
 
-def show_historical(from_time, to_time, from_cur, to_cur):
+def show_historical(from_time, to_time, from_cur, to_cur, amount):
     payload = {
         'from': from_cur,
-        'to': to_cur
+        'to': to_cur,
+        'amount': amount
     }
     frankfurter_r = reqs.get(f"{HOST_FRANKFURTER}/{from_time}..{to_time}", params=payload)
     if frankfurter_r.ok:
         historical_dict = frankfurter_r.json()
+        print(historical_dict)
         plot_currency(historical_dict)
