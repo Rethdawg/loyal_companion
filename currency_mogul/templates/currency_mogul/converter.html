@@ -1,0 +1,43 @@
+{% extends 'currency_mogul/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">Result</div>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        {% if posting %}
+                            {{ from_amount }}{{ money_dict.from }} <b>=></b> {{ money_dict.amount }} {{ money_dict.to }}
+                        {% else %}
+                            Convert some currency!
+                        {% endif %}
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="col-form-label mt-4" for="from_curr">From currency:</label>
+                    <input list="currencies_from" id="from_curr" type="text" placeholder="EUR" name="from_curr">
+                    <datalist id="currencies_from">
+                        {% for currency in all_currencies.keys %}<option value="{{ currency }}">{% endfor %}
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label mt-4" for="to_curr">To currency:</label>
+                    <input list="currencies_to" id="to_curr" type="text" placeholder="USD" name="to_curr">
+                    <datalist id="currencies_to">
+                        {% for currency in all_currencies.keys %}<option value="{{ currency }}">{% endfor %}
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label mt-4" for="amount">Amount</label>
+                    <input type="number" step="0.01" class="form-control" placeholder="1.00" id="amount" name="amount">
+                </div>
+                    <button type="submit" class="btn btn-primary">Convert</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

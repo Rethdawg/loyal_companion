@@ -50,3 +50,26 @@ def historical_graph(request):
             {'posting': posting
              })
     return render(request, 'currency_mogul/historical-rates.html', context=context)
+
+
+def converter(request):
+    context = {
+        'all_currencies': all_currencies
+    }
+    if request.method == 'POST':
+        from_curr = request.POST['from_curr']
+        from_amount = request.POST['amount']
+        to_curr = request.POST['to_curr']
+        posting = True
+
+        context.update({
+            'money_dict': convert_currency(from_curr, to_curr, from_amount),
+            'from_amount': from_amount,
+            'posting': posting
+        })
+    else:
+        posting = False
+        context.update(
+            {'posting': posting
+             })
+    return render(request, 'currency_mogul/converter.html', context=context)

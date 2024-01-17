@@ -3,5 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='currency-index'),
-    path('historical/', views.historical_graph, name='currency-historical')
+    path('historical/', views.historical_graph, name='currency-historical'),
+    path('converter/', views.converter, name='currency-converter')
 ]
