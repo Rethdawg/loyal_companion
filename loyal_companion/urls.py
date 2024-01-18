@@ -22,5 +22,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('weatherman/', include('weatherman.urls')),
-    path('currency/', include('currency_mogul.urls'))
+    path('currency/', include('currency_mogul.urls')),
+    path('notes/', include('memory_crystal.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
