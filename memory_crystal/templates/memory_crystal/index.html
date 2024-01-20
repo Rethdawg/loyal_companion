@@ -1,4 +1,117 @@
 {% extends 'memory_crystal/base.html' %}
 {% block content %}
-Hello, welcome to the page.
+<div class="container">
+  <div class="row">
+    <div class="col-2">
+            <div class="accordion" id="accordionExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    All memo categories
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
+                  <div class="accordion-body">
+                    <ul>
+                      {% for category in all_categories %}
+                      <li>
+                        <a> {{ category }}</a>
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    This year's memos
+                  </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <ul>
+                      {% for month in months %}
+                      <li>
+                        {{ month }}
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Previous years' memos
+                  </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <ul>
+                      {% for year in years %}
+                      <li>
+                        {{ year }}
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    <div class="col-8">
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active" data-bs-toggle="tab" href="#memos" aria-selected="true" role="tab">Most recent notes</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" data-bs-toggle="tab" href="#birthdays" aria-selected="false" role="tab" tabindex="-1">Upcoming birthdays</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" data-bs-toggle="tab" href="#notepad" aria-selected="false" role="tab" tabindex="-1">Notepad</a>
+        </li>
+      </ul>
+      <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade active show" id="memos" role="tabpanel">
+          {% for memo in recent_memos %}
+            {% if memo.title %}
+              <h3>{{ memo.title }}</h3>
+            {% endif %}
+              <p>Created on: {{ memo.pub_date }}. Last updated: {{ memo.last_modified }}</p>
+              <p>Categories: {{ memo.all_categories }}</p>
+              <p>{{ memo.content }}</p>
+              <p>-------------------------------------------------------------------------</p>
+          {% endfor %}
+        </div>
+        <div class="tab-pane fade" id="birthdays" role="tabpanel">
+          <ul>
+            {% for bd in ordered_birthdays %}
+            <li>
+              {{ bd }}
+            </li>
+            {% endfor %}
+          </ul>
+
+        </div>
+        <div class="tab-pane fade" id="notepad" role="tabpanel">
+
+        </div>
+    </div>
+  </div>
+    <div class="col-2">
+      {% for bd in birthdays.all %}
+        {% for message in messages %}
+        <div class="col-12">
+          <div class="alert alert-dismissible alert-{% if message.tags == 'info' %}info
+          {% elif message.tags == 'warning'%}warning{% elif message.tags == 'error' %}danger{% endif %}">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <h4 class="alert-heading">Warning!</h4>
+            <p class="mb-0">{{ message }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    {% endfor %}
+    </div>
+</div>
 {% endblock %}
