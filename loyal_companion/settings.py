@@ -34,6 +34,9 @@ INSTALLED_APPS = [
     'weatherman',
     'currency_mogul',
     'memory_crystal',
+    'tinymce',
+    'crispy_forms',
+    'crispy_bootstrap5',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -126,3 +129,38 @@ MEDIA_ROOT = Path(BASE_DIR / '/media')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Template Packs
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# TinyMCE config
+
+TINYMCE_DEFAULT_CONFIG = {
+    'height': 360,
+    'cleanup_on_startup': True,
+    'custom_undo_redo_levels': 20,
+    'selector': 'textarea',
+    'plugins': '''
+ textcolor save link image media preview codesample contextmenu
+ table code lists fullscreen insertdatetime nonbreaking
+ contextmenu directionality searchreplace wordcount visualblocks
+ visualchars code fullscreen autolink lists charmap print hr
+ anchor pagebreak
+ ''',
+    'toolbar1': '''
+ fullscreen preview bold italic underline | fontselect,
+ fontsizeselect | forecolor backcolor | alignleft alignright |
+ aligncenter alignjustify | indent outdent | bullist numlist table |
+ | link image media | codesample |
+ ''',
+    'toolbar2': '''
+ visualblocks visualchars |
+ charmap hr pagebreak nonbreaking anchor | code |
+ ''',
+    'contextmenu': 'formats | link image',
+    'menubar': True,
+    'statusbar': True,
+}

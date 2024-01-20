@@ -1,5 +1,6 @@
 {% extends 'memory_crystal/base.html' %}
 {% block content %}
+{% load crispy_forms_tags %}
 <div class="container">
   <div class="row">
     <div class="col-2">
@@ -78,9 +79,9 @@
             {% if memo.title %}
               <h3>{{ memo.title }}</h3>
             {% endif %}
-              <p>Created on: {{ memo.pub_date }}. Last updated: {{ memo.last_modified }}</p>
-              <p>Categories: {{ memo.all_categories }}</p>
-              <p>{{ memo.content }}</p>
+              <p><span class="badge bg-primary"><b>Created on:</b></span> {{ memo.pub_date }}. <span class="badge bg-primary"><b>Last updated:</b></span> {{ memo.last_modified }}</p>
+              <p><b>Categories:</b> {{ memo.all_categories }}</p>
+              <p>{{ memo.content | safe}}</p>
               <p>-------------------------------------------------------------------------</p>
           {% endfor %}
         </div>
@@ -95,23 +96,28 @@
 
         </div>
         <div class="tab-pane fade" id="notepad" role="tabpanel">
-
+          <div class="fieldWrapper">
+            <form action="" method="post">
+              {% csrf_token %}
+              {{ np_form | crispy }}
+              <input type="submit" class="btn btn-primary" value="Save memo">
+              <input type="submit" class="btn btn-primary" value="Clear memo">
+            </form>
+          </div>
         </div>
     </div>
   </div>
     <div class="col-2">
-      {% for bd in birthdays.all %}
-        {% for message in messages %}
-        <div class="col-12">
-          <div class="alert alert-dismissible alert-{% if message.tags == 'info' %}info
-          {% elif message.tags == 'warning'%}warning{% elif message.tags == 'error' %}danger{% endif %}">
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            <h4 class="alert-heading">Warning!</h4>
-            <p class="mb-0">{{ message }}</p>
-          </div>
-        </div>
+      {% for message in messages %}
+      <div class="alert alert-dismissible alert-{% if message.tags == 'info' %}info
+      {% elif message.tags == 'warning' %}warning{% elif message.tags == 'error' %}danger
+      {% elif message.tags == 'success' %}success{% endif %}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <h4 class="alert-heading">Warning!</h4>
+        <p class="mb-0">{{ message }}</p>
+      </div>
       {% endfor %}
-    {% endfor %}
     </div>
+  </div>
 </div>
 {% endblock %}

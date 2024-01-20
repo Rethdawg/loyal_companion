@@ -21,7 +21,7 @@ class BirthdayNoteAdmin(admin.ModelAdmin):
 
 class MemoAdmin(admin.ModelAdmin):
     readonly_fields = ('pub_date', 'id', 'last_modified', 'slug')
-    list_display = ('pub_date', 'last_modified', 'title', 'status', 'category')
+    list_display = ('pub_date', 'last_modified', 'title', 'status')
 
 
 class CategoryAdmin(admin.ModelAdmin):

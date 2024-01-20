@@ -51,6 +51,9 @@ class Category(models.Model):
     def __str__(self):
         return f'{self.name.title()}'
 
+    class Meta:
+        verbose_name_plural = 'Categories'
+
 
 class Birthday(models.Model):
     person = models.CharField(max_length=100, unique=True, help_text='Birthday person')

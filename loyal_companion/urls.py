@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('weatherman/', include('weatherman.urls')),
     path('currency/', include('currency_mogul.urls')),
-    path('notes/', include('memory_crystal.urls'))
+    path('notes/', include('memory_crystal.urls')),
+    path('tinymce', include('tinymce.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
