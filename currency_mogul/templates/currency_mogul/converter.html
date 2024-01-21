@@ -23,13 +23,15 @@
                     <label class="col-form-label mt-4" for="from_curr">From currency:</label>
                     <input list="currencies_from" id="from_curr" type="text" placeholder="EUR" name="from_curr">
                     <datalist id="currencies_from">
-                        {% for currency in all_currencies.keys %}<option value="{{ currency }}">{% endfor %}
+                        {% for currency in all_currencies.keys %}<option value="{{ currency }}">{% endfor %}</option>
+                    </datalist>
                 </div>
                 <div class="form-group">
                     <label class="col-form-label mt-4" for="to_curr">To currency:</label>
                     <input list="currencies_to" id="to_curr" type="text" placeholder="USD" name="to_curr">
                     <datalist id="currencies_to">
-                        {% for currency in all_currencies.keys %}<option value="{{ currency }}">{% endfor %}
+                        {% for currency in all_currencies.keys %}<option value="{{ currency }}">{% endfor %}</option>
+                    </datalist>
                 </div>
                 <div class="form-group">
                     <label class="col-form-label mt-4" for="amount">Amount</label>
