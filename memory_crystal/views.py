@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_list_or_404
 from .models import BirthdayNote, Birthday, Memo, Category
 from .forms import MemoForm, CategoryForm
 from django.contrib import messages
@@ -43,6 +43,33 @@ class MemoList(generic.ListView):
     queryset = Memo.objects.all().order_by('-pub_date')
 
 
+def memo_by_category(request, category_name):
+    memo_list = get_list_or_404(Memo.objects.filter(category__name__icontains=category_name).order_by('-pub_date'))
+    paginator = Paginator(memo_list, 4)
+    page_number = request.GET.get('page')
+    paged_memos = paginator.get_page(page_number)
+    return render(request, 'memory_crystal/memo_category.html', {'memo_list': paged_memos})
+
+
 class MemoDetailView(generic.DetailView):
     model = Memo
     template_name = 'memo_detail.html'
+
+
+class MemoUpdateView(generic.UpdateView):
+    model = Memo
+    success_url = '/notes'
+    template_name = 'memo_create_form.html'
+    form_class = MemoForm
+
+
+class MemoDeleteView(generic.DeleteView):
+    model = Memo
+    success_url = '/notes'
+    template_name = 'memo_delete.html'
+
+
+class BirthdayList(generic.ListView):
+    model = Birthday
+    template_name = 'birthday_list.html'
+    queryset = Birthday.objects.all().order_by('-bdate')

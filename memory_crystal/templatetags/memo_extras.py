@@ -8,3 +8,8 @@ register = template.Library()
 def render_offcanvas():
     all_categories = Category.objects.all()
     return {'all_categories': all_categories}
+
+
+@register.inclusion_tag('memory_crystal/pagination.html')
+def paginate(paginated_obj):
+    return {'page_obj': paginated_obj}
