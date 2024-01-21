@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from .models import BirthdayNote, Birthday, Memo, Category
 from .forms import MemoForm, CategoryForm
 from django.contrib import messages
+from django.views import generic
+from django.http import JsonResponse
+from django.core.paginator import Paginator
 # Create your views here.
 
 
@@ -31,3 +34,15 @@ def index(request):
         'np_form': np_form
     }
     return render(request, 'memory_crystal/index.html', context=context)
+
+
+class MemoList(generic.ListView):
+    model = Memo
+    template_name = 'memo_list.html'
+    paginate_by = 4
+    queryset = Memo.objects.all().order_by('-pub_date')
+
+
+class MemoDetailView(generic.DetailView):
+    model = Memo
+    template_name = 'memo_detail.html'

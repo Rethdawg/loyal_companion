@@ -1,0 +1,37 @@
+{% extends 'memory_crystal/base.html' %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      {% for memo in memo_list %}
+        {% if memo.title %}
+        <h3>{{ memo.title }}</h3>
+        {% endif %}
+      <p><span class="badge bg-primary"><b>Created on:</b></span> {{ memo.pub_date }}. <span class="badge bg-primary"><b>Last updated:</b></span> {{ memo.last_modified }}</p>
+      <p><b>Categories:</b> {{ memo.all_categories }}</p>
+      <p>{{ memo.content | safe}}</p>
+      <hr>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div>
+        <ul class="pagination">
+          <li class="page-item {% if not page_obj.has_previous %}disabled{% else %}{% endif %}">
+            <a class="page-link" href="?page=1">&laquo;</a>
+          </li>
+          {% for page_number in page_obj.paginator.page_range %}
+          <li class="page-item {% if page_number == page_obj.number%}active{% else %}{% endif %}">
+            <a class="page-link" href="?page={{ page_number}}">{{ page_number }}</a>
+          </li>
+          {% endfor %}
+          <li class="page-item {% if not page_obj.has_next %}disabled{% else %}{% endif %}">
+            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
