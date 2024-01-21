@@ -5,7 +5,7 @@
     <div class="col-12">
       {% for memo in memo_list %}
         {% if memo.title %}
-        <h3>{{ memo.title }}</h3>
+        <h3><a href="{% url 'memo-detail' memo.slug %}">{{ memo.title }}</a></h3>
         {% endif %}
       <p><span class="badge bg-primary"><b>Created on:</b></span> {{ memo.pub_date }}. <span class="badge bg-primary"><b>Last updated:</b></span> {{ memo.last_modified }}</p>
       <p><b>Categories:</b> {{ memo.all_categories }}</p>

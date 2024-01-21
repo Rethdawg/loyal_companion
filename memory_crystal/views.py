@@ -71,7 +71,12 @@ class MemoDeleteView(generic.DeleteView):
     template_name = 'memory_crystal/memo_detail.html'
 
 
-class BirthdayList(generic.ListView):
+class BirthdayListView(generic.ListView):
     model = Birthday
-    template_name = 'birthday_list.html'
+    template_name = 'memory_crystal/birthday_list.html'
     queryset = Birthday.objects.all().order_by('-bdate')
+
+
+class BirthdayDetailView(generic.DetailView):
+    model = Birthday
+    template_name = 'memory_crystal/birthday_detail.html'

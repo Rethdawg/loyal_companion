@@ -1,0 +1,22 @@
+{% extends 'memory_crystal/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2>{{ birthday.person }}'s Birthday</h2>
+            <h3>Date: {{ birthday.bdate }}</h3>
+            <h3>Notes:</h3>
+            <ul>
+                {% for note in birthday.notes.all %}
+                <li>
+                    <p><span class="badge bg-primary"><b>Created on:</b></span> {{ note.pub_date }}</p>
+                    <p><span class="badge bg-primary"><b>Title:</b></span>{{ note.title }}</p>
+                    <p>{{ note.content | safe }}</p>
+                    <hr>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

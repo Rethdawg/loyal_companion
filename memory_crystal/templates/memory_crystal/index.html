@@ -24,7 +24,7 @@
               <p><span class="badge bg-primary"><b>Created on:</b></span> {{ memo.pub_date }}. <span class="badge bg-primary"><b>Last updated:</b></span> {{ memo.last_modified }}</p>
               <p><b>Categories:</b> {{ memo.all_categories }}</p>
               <p>{{ memo.content | safe}}</p>
-              <p>-------------------------------------------------------------------------</p>
+              <hr>
           {% endfor %}
         </div>
         <div class="tab-pane fade" id="birthdays" role="tabpanel">
