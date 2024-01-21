@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, get_list_or_404
+from django.urls import reverse_lazy
+
 from .models import BirthdayNote, Birthday, Memo, Category
 from .forms import MemoForm, CategoryForm
 from django.contrib import messages
@@ -53,20 +55,20 @@ def memo_by_category(request, category_name):
 
 class MemoDetailView(generic.DetailView):
     model = Memo
-    template_name = 'memo_detail.html'
+    template_name = 'memory_crystal/memo_detail.html'
 
 
 class MemoUpdateView(generic.UpdateView):
     model = Memo
     success_url = '/notes'
-    template_name = 'memo_create_form.html'
+    template_name = 'memory_crystal/memo_update_form.html'
     form_class = MemoForm
 
 
 class MemoDeleteView(generic.DeleteView):
     model = Memo
-    success_url = '/notes'
-    template_name = 'memo_delete.html'
+    success_url = reverse_lazy('memory-index')
+    template_name = 'memory_crystal/memo_detail.html'
 
 
 class BirthdayList(generic.ListView):

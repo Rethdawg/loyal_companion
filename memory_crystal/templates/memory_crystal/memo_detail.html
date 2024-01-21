@@ -1,0 +1,43 @@
+{% extends 'memory_crystal/base.html' %}
+{% block content %}
+{% load memo_extras %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h3>{{ memo.title }}</h3>
+            <p><span class="badge bg-primary"><b>Created on:</b></span> {{ memo.pub_date }}. <span class="badge bg-primary"><b>Last updated:</b></span> {{ memo.last_modified }}</p>
+            <p><b>Categories:</b> {{ memo.all_categories }}</p>
+            <p>{{ memo.content | safe}}</p>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <a type="button" class="btn btn-primary" href="{% url 'memo-edit' memo.slug %}">Edit memo</a>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">Delete memo</button>
+        </div>
+    </div>
+</div>
+<div class="modal" id="delete-modal" tabindex="-1" aria-labelledby="delete-modal-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="delete-modal-label">Delete Memo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this memo? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <form action="{% url 'memo-delete' memo.slug %}" method="post">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-primary" value="Yes">
+        </form>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
