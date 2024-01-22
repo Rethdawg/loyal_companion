@@ -1,0 +1,60 @@
+{% extends 'overseer/base.html' %}
+{% block content %}
+{% load overseer_extras %}
+<div class="container">
+    {% for task in task_list %}
+    <div class="row">
+        <div class="col-12">
+
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% for task in task_list %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <p class="text-{{ task.severity }}">{{ task.title }} due on {{ task.due_date }}</p>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: {{ task.progress_percentage }};" aria-valuenow="{{ task.progress }}" aria-valuemin="0" aria-valuemax="{{ task.subtasks.all.count }}"></div>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Due date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for subtask in task.subtasks.all %}
+                    <tr class="table-{{ subtask.severity }}">
+                        <th scope="row">{{ subtask.title }}</th>
+                        <td>{{ subtask.due_date }}</td>
+                        <td>{{ subtask.status }}</td>
+                        <td>
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                            <div class="dropdown-menu" style="">
+                                <h6 class="dropdown-header">Dropdown header</h6>
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Separated link</a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+            <hr>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}
+
+
+
