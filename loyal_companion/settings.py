@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'weatherman',
     'currency_mogul',
     'memory_crystal',
+    'overseer',
     'tinymce',
     'crispy_forms',
     'crispy_bootstrap5',
