@@ -36,7 +36,8 @@ class Task(models.Model):
 
     @property
     def progress_percentage(self):
-        return str(round(100 / self.subtasks.all().count() * self.progress, 2)) + '%'
+        subtask_num = self.subtasks.all().count() if self.subtasks.all().count() != 0 else 1
+        return str(round(100 / subtask_num * self.progress, 2)) + '%'
 
 
 class SubTask(models.Model):
