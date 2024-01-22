@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect, get_list_or_404
+from django.shortcuts import render, redirect, get_list_or_404, reverse
 from django.urls import reverse_lazy
 
 from .models import BirthdayNote, Birthday, Memo, Category
-from .forms import MemoForm, CategoryForm
+from .forms import MemoForm, CategoryForm, BirthdayForm, BirthdayNoteForm
 from django.contrib import messages
 from django.views import generic
+from django.views.generic.edit import FormMixin
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 # Create your views here.
@@ -22,6 +23,7 @@ def index(request):
             new_memo.save()
             new_memo.category.set(form_data.cleaned_data['category'])
             messages.success(request, 'Memo created!')
+            redirect('memo-detail', slug=new_memo.slug)
     np_form = MemoForm
     recent_memos = Memo.objects.all().order_by('-last_modified')[:5]
     all_categories = Category.objects.all()
@@ -71,12 +73,75 @@ class MemoDeleteView(generic.DeleteView):
     template_name = 'memory_crystal/memo_detail.html'
 
 
-class BirthdayListView(generic.ListView):
-    model = Birthday
-    template_name = 'memory_crystal/birthday_list.html'
-    queryset = Birthday.objects.all().order_by('-bdate')
+def birthday_list_view(request):
+    if request.method == 'POST':
+        form_data = BirthdayForm(request.POST)
+        if form_data.is_valid():
+            new_birthday = Birthday(
+                person=form_data.cleaned_data['person'],
+                bdate=form_data.cleaned_data['bdate']
+            )
+            new_birthday.save()
+            messages.success(request, 'Birthday created!')
+            return redirect('birthday-detail', pk=new_birthday.id)
+    bd_form = BirthdayForm
+    birthday_list = Birthday.objects.all().order_by('bdate')
+    context = {
+        'bd_form': bd_form,
+        'birthday_list': birthday_list
+    }
+    return render(request, 'memory_crystal/birthday_list.html', context=context)
 
 
-class BirthdayDetailView(generic.DetailView):
+class BirthdayDetailView(generic.DetailView, FormMixin):
     model = Birthday
     template_name = 'memory_crystal/birthday_detail.html'
+    form_class = BirthdayNoteForm
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form.instance.birthday = self.object
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('birthday-detail', kwargs={'pk': self.object.id})
+
+
+class BirthdayUpdateView(generic.UpdateView):
+    model = Birthday
+    form_class = BirthdayForm
+    template_name = 'memory_crystal/birthday_update_form.html'
+
+    def get_success_url(self):
+        return reverse('birthday-detail', kwargs={'pk': self.get_object().id})
+
+
+class BirthdayDeleteView(generic.DeleteView):
+    model = Birthday
+    template_name = 'memory_crystal/birthday_detail.html'
+    success_url = reverse_lazy('birthdays-all')
+
+
+class BirthdayNoteUpdateView(generic.UpdateView, FormMixin):
+    model = BirthdayNote
+    template_name = 'memory_crystal/birthdaynote_update_form.html'
+    form_class = BirthdayNoteForm
+
+    def get_success_url(self):
+        return reverse('birthday-detail', kwargs={'pk': self.get_object().birthday.id})
+
+
+class BirthdayNoteDeleteView(generic.DeleteView):
+    model = BirthdayNote
+    template_name = 'memory_crystal/birthday_detail.html'
+
+    def get_success_url(self):
+        return reverse('birthday-detail', kwargs={'pk': self.get_object().id})
