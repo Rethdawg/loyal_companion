@@ -25,5 +25,6 @@ urlpatterns = [
     path('currency/', include('currency_mogul.urls')),
     path('notes/', include('memory_crystal.urls')),
     path('tasks/', include('overseer.urls')),
+    path('dashboard/', include('dashboard.urls')),
     path('tinymce', include('tinymce.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

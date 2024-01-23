@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'currency_mogul',
     'memory_crystal',
     'overseer',
+    'dashboard',
     'tinymce',
     'crispy_forms',
     'crispy_bootstrap5',
