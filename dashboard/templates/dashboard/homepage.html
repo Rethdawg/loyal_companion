@@ -4,8 +4,64 @@
 <br>
 <div class="container">
     <div class="row">
-        <div class="col-8">
+        <div class="col-12">
 
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <a class="nav-link active" data-bs-toggle="tab" href="#home" aria-selected="true" role="tab">Recent Memos</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link" data-bs-toggle="tab" href="#profile" aria-selected="false" tabindex="-1" role="tab">To-Do List</a>
+              </li>
+            </ul>
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade show active" id="home" role="tabpanel">
+                  {% for memo in recent_memos %}
+                    {% if memo.title %}
+                      <h3><a href="{% url 'memo-detail' memo.slug %}">{{ memo.title }}</a></h3>
+                    {% endif %}
+                      <p><span class="badge bg-primary"><b>Created on:</b></span> {{ memo.pub_date }}. <span class="badge bg-primary"><b>Last updated:</b></span> {{ memo.last_modified }}</p>
+                      <p><b>Categories:</b> {{ memo.all_categories }}</p>
+                      <p>{{ memo.content | safe}}</p>
+                      <hr>
+                  {% endfor %}
+                </div>
+                <div class="tab-pane show active" id="profile" role="tabpanel">
+                    {% for task in task_list %}
+                    <hr>
+                    <a href="{% url 'task-detail' task.id %}">
+                        <p class="text-{{ task.severity }}"><b>{{ task.title }}</b> due on <b>{{ task.due_date }}</b></p>
+                    </a>
+                    {% if task.subtasks.all.count > 0 %}
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: {{ task.progress_percentage }};" aria-valuenow="{{ task.progress }}" aria-valuemin="0" aria-valuemax="{{ task.subtasks.all.count }}"></div>
+                    </div>
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Title</th>
+                            <th scope="col">Due date</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for subtask in task.subtasks.all %}
+                        <tr class="table-{{ subtask.severity }}">
+                            <th scope="row">{{ subtask.title }}</th>
+                            <td>{{ subtask.due_date }}</td>
+                            <td>{{ subtask.status }}</td>
+                        </tr>
+                        </tbody>
+                        {% endfor %}
+                    </table>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            </div>
         </div>
         <div class="col-4">
             <div class="card text-white bg-dark mb-3" style="max-width: 20rem;">
