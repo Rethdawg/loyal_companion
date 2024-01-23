@@ -2,6 +2,23 @@
 {% block content %}
 {% load overseer_extras %}
 <br>
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <a type="button" class="btn btn-primary" href="{% url 'task-create'%}">Create task</a>
+        </div>
+        <div class="col-4"></div>
+        <div class="col-4">
+            <form class="d-flex" method="post">
+                {% csrf_token %}
+                <input class="form-control me-sm-2" type="search" placeholder="Search by task title..." name="search_text">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+</div>
+<br>
+<hr>
 {% for task in task_list %}
     <div class="container">
         <div class="row">
@@ -31,9 +48,28 @@
                         <td>
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">. . .</a>
                             <div class="dropdown-menu" style="">
-                                <a class="dropdown-item" href="#">View content</a>
-                                <a class="dropdown-item" href="#">Edit</a>
-                                <a class="dropdown-item" href="#">Delete</a>
+                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-content">View content</a>
+                                <a class="dropdown-item" href="{% url 'subtask-edit' subtask.id %}">Edit</a>
+                                <a class="dropdown-item" href="{% url 'subtask-delete' subtask.id %}">Delete</a>
+                            </div>
+                            <!--View Content Modal-->
+                            <div class="modal" id="modal-content">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title">Subtask content</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true"></span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <p>{{ subtask.content | safe }}</p>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                         </td>
                     </tr>
@@ -51,6 +87,7 @@
         {% paginate task_list %}
     </div>
 </div>
+
 {% endblock %}
 
 

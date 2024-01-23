@@ -11,7 +11,11 @@
                 </fieldset>
                 <div class="form-group">
                     <input type="submit" class="btn btn-primary" value="Save changes">
-                    <a type="submit" class="btn btn-primary" href="{% url 'task-detail' task.id %}">Cancel</a>
+                    {% if task.id %}
+                        <a type="submit" class="btn btn-primary" href="{% url 'task-detail' task.id %}">Cancel</a>
+                    {% else %}
+                        <a type="submit" class="btn btn-primary" href="{% url 'overseer-index' %}">Cancel</a>
+                    {% endif %}
                 </div>
             </form>
         </div>

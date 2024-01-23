@@ -10,15 +10,16 @@ from django.views.generic.edit import FormMixin
 
 def index(request):
     if request.method == 'POST':
-        pass
-    task_list = Task.objects.all()
-    ren_task_list = RenewableTask.objects.all()
+        query_text = request.POST['search_text']
+        task_list = Task.objects.filter(title__icontains=query_text)
+    else:
+        task_list = Task.objects.all()
+        # ren_task_list = RenewableTask.objects.all()
     paginator = Paginator(task_list, 4)
     page_number = request.GET.get('page')
     paged_tasks = paginator.get_page(page_number)
     context = {
         'task_list': paged_tasks,
-        'ren_task_list': ren_task_list
     }
     return render(request, 'overseer/index.html', context=context)
 
@@ -37,7 +38,7 @@ class TaskDetailView(generic.DetailView, FormMixin):
             return self.form_invalid(form)
 
     def form_valid(self, form):
-        form.instance.task = self.object
+        form.instance.main_task = self.object
         form.save()
         return super().form_valid(form)
 
@@ -51,7 +52,7 @@ class TaskCreateView(generic.CreateView):
     template_name = 'overseer/task_update_form.html'
 
     def get_success_url(self):
-        return reverse('task-edit', kwargs={'pk': self.object.id})
+        return reverse('task-detail', kwargs={'pk': self.object.id})
 
 
 class TaskUpdateView(generic.UpdateView):

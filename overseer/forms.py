@@ -15,8 +15,9 @@ class TaskForm(forms.ModelForm):
 class SubtaskForm(forms.ModelForm):
     class Meta:
         model = SubTask
-        fields = ('title', 'due_date', 'status', 'content', 'main_task')
+        fields = ('title', 'due_date', 'status', 'content',)
         widgets = {
             'pub_date': forms.HiddenInput,
-            'content': TinyMCE()
+            'content': TinyMCE(),
+            'main_task': forms.HiddenInput
         }
