@@ -1,0 +1,26 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+{% load dashboard_extras %}
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+
+        </div>
+        <div class="col-4">
+            <div class="card text-white bg-dark mb-3" style="max-width: 20rem;">
+                <div class="card-header">RSS Feed</div>
+                <div class="card-body">
+                    {% for entry in all_entries %}
+                    <a href="{{ entry.link }}"><h5 class="card-title">{{ entry.title }}</h5></a>
+                    <p class="text-body-tertiary">{{ entry.entry_type }}, {{ entry.pub_date }}</p>
+                    <p class="card-text">{{ entry.description }}</p>
+                    <br>
+                    {% endfor %}
+                    {% paginate all_entries %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -15,5 +15,38 @@ class FeedEntry(models.Model):
     entry_type = models.CharField(max_length=200)
     guid = models.CharField(max_length=200)
 
+    class Meta:
+        ordering = ['-pub_date']
+
     def __str__(self):
         return f'{self.entry_type}: {self.title}'
+
+
+class SteamGameFeed(models.Model):
+    """
+    Class that describes a steam game of interest for parsing.
+    """
+    title = models.CharField(max_length=200)
+    appid = models.IntegerField(verbose_name='App ID')
+
+    @property
+    def rss_link(self) -> str:
+        """
+        Generates an rss feed link from the app id.
+        :return: URL as a string
+        """
+        return f'https://store.steampowered.com/feeds/news/app/{self.appid}/'
+
+    def __str__(self):
+        return self.title
+
+
+class WebsiteFeed(models.Model):
+    """
+    Class that describes a website of interest for parsing.
+    """
+    title = models.CharField(max_length=200)
+    rss_link = models.URLField()
+
+    def __str__(self):
+        return self.title
