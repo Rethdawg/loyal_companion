@@ -29,16 +29,14 @@ def homepage(request):
     # Weather context
     tracked_cities = CitiesForWeather.objects.all()
     if len(tracked_cities) == 1:
-        weather_forecasts = [add_or_renew_tracked_forecast(request, tracked_cities[0])]
+        weather_forecasts = [tc for tc in add_or_renew_tracked_forecast(request, tracked_cities)]
     elif len(tracked_cities) == 0:
         weather_forecasts = []
     else:
         weather_forecasts = []
         for tracked_city in CitiesForWeather.objects.all():
-            weather_forecasts.append(
-                add_or_renew_tracked_forecast(request, tracked_city)
-            )
-    print(weather_forecasts)
+            for tc in add_or_renew_tracked_forecast(request, tracked_city):
+                weather_forecasts.append(tc)
     # Form context
     city_form = CitiesForWeatherForm
     # Currency context

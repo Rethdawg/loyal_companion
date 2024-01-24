@@ -12,8 +12,7 @@
     {% endif %}
     <div class="row">
         <div class="col-9 d-flex flex-row">
-            {% for weather_forecast_query in weather_forecasts %}
-            {% for forecast in weather_forecast_query %}
+            {% for forecast in weather_forecasts %}
             <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
               <div class="card-header">
                 <b>Forecast</b>
@@ -27,7 +26,6 @@
                         {{ forecast.city_country }}</a></h5>
                 </div>
             </div>
-            {% endfor %}
             {% endfor %}
         </div>
         <div class="col-1">
