@@ -64,5 +64,4 @@ def show_historical(from_time, to_time, from_cur, to_cur, amount):
     frankfurter_r = reqs.get(f"{HOST_FRANKFURTER}/{from_time}..{to_time}", params=payload)
     if frankfurter_r.ok:
         historical_dict = frankfurter_r.json()
-        print(historical_dict)
         plot_currency(historical_dict)

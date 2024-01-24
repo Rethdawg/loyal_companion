@@ -3,8 +3,15 @@
 {% load dashboard_extras %}
 <br>
 <div class="container">
+    {% if alarms %}
     <div class="row">
-        <div class="col-9">
+        <div class="col-12 d-flex flex-row">
+
+        </div>
+    </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-9 d-flex flex-row">
             {% for weather_forecast_query in weather_forecasts %}
             {% for forecast in weather_forecast_query %}
             <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
@@ -16,7 +23,7 @@
                           src="http://openweathermap.org/img/w/{{ forecast.icon }}.png" alt="Image" style="width:70px"></h5>
                     <h5><span class="badge badge-primary"></span> {{ forecast.temperature }}°C</h5>
                     <h5><span class="badge badge-primary"></span> {{ forecast.pub_date }}</h5>
-                    <h5><span class="badge badge-primary"></span><a href="https://openweathermap.org/city{{ forecast.city_id }}">
+                    <h5><span class="badge badge-primary"></span><a href="https://openweathermap.org/city/{{ forecast.city_id }}">
                         {{ forecast.city_country }}</a></h5>
                 </div>
             </div>
@@ -51,15 +58,18 @@
     <div class="row">
         <div class="col-8">
             <ul class="nav nav-tabs" role="tablist">
-              <li class="nav-item" role="presentation">
-                <a class="nav-link active" data-bs-toggle="tab" href="#home" aria-selected="true" role="tab">Recent Memos</a>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#memos" aria-selected="true" role="tab">Recent Memos</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                <a class="nav-link" data-bs-toggle="tab" href="#todo" aria-selected="false" tabindex="-1" role="tab">To-Do List</a>
               </li>
-              <li class="nav-item" role="presentation">
-                <a class="nav-link" data-bs-toggle="tab" href="#profile" aria-selected="false" tabindex="-1" role="tab">To-Do List</a>
-              </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" data-bs-toggle="tab" href="#currency" aria-selected="false" tabindex="-1" role="tab">Exchange Rates</a>
+                </li>
             </ul>
             <div id="myTabContent" class="tab-content">
-                <div class="tab-pane fade show active" id="home" role="tabpanel">
+                <div class="tab-pane fade show active" id="memos" role="tabpanel">
                   {% for memo in recent_memos %}
                     {% if memo.title %}
                       <h3><a href="{% url 'memo-detail' memo.slug %}">{{ memo.title }}</a></h3>
@@ -70,7 +80,7 @@
                       <hr>
                   {% endfor %}
                 </div>
-                <div class="tab-pane show active" id="profile" role="tabpanel">
+                <div class="tab-pane fade show active" id="todo" role="tabpanel">
                     {% for task in task_list %}
                     <hr>
                     <a href="{% url 'task-detail' task.id %}">
@@ -99,7 +109,35 @@
                         {% endfor %}
                     </table>
                     {% endif %}
-                {% endfor %}
+                    {% endfor %}
+                </div>
+                <div class="tab-pane fade show active" id="currency" role="tabpanel">
+                    <div class="all-currency-table">
+                        {% if money_dict %}
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th scope="col">Currency</th>
+                              <th scope="col">Amount</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="table-primary">
+                              <th scope="row">{{ money_dict.base }}</th>
+                              <td>{{ money_dict.amount }}</td>
+                            </tr>
+                            {% for key, value in money_dict.rates.items %}
+                            <tr class="table-dark">
+                              <th scope="row">{{ key }}</th>
+                              <td>{{ value }}</td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                        {% else %}
+                            <p>No data to display. It appears there's no answer from the API.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

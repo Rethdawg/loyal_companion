@@ -5,7 +5,7 @@ from .forms import CitiesForWeatherForm
 from memory_crystal.models import Memo
 from overseer.models import Task
 from django.core.paginator import Paginator
-from django.db.models import Q
+from currency_mogul.api_utils import show_all_rates
 from django.views import generic
 from .utils import add_or_renew_tracked_forecast
 # Create your views here.
@@ -41,15 +41,16 @@ def homepage(request):
     print(weather_forecasts)
     # Form context
     city_form = CitiesForWeatherForm
-    # Tracked City context
-    tracked_cities = CitiesForWeather.objects.all()
+    # Currency context
+    money_dict = show_all_rates()
     context = {
         'all_entries': paged_entries,
         'recent_memos': recent_memos,
         'task_list': task_list,
         'weather_forecasts': weather_forecasts,
         'city_form': city_form,
-        'tracked_cities': tracked_cities
+        'tracked_cities': tracked_cities,
+        'money_dict': money_dict
     }
     return render(request, 'dashboard/homepage.html', context=context)
 

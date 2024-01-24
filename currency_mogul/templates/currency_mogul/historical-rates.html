@@ -6,14 +6,14 @@
         <div class="col-sm-10 d-flex align-items-stretch">
             <div class="card text-white bg-primary mb-3">
                     <div class="card-header">
-                        {% if posting %}
+                        {% if request.method == 'POST' %}
                             {{ amount }} {{ from_curr }} - {{ to_curr }}, {{ from_date }} - {{ to_date }}
                         {% else %}
                         Rate history
                         {% endif %}
                     </div>
                 <div class="card-body">
-                    {% if posting %}
+                    {% if request.method == 'POST' %}
                         <img src="{% static 'images/historical.png' %}">
                     {% else %}
                         <p><b>Generate a graph!</b></p>
@@ -28,8 +28,8 @@
                         <label class="col-form-label mt-4" for="from_curr">From currency:</label>
                         <input list="currencies_from" id="from_curr" type="text" placeholder="EUR" name="from_curr">
                         <datalist id="currencies_from">
-                            {% for currency in all_currencies.keys %}
-                                <option value="{{ currency }}"></option>
+                            {% for currency in all_currencies %}
+                                <option value="{{ currency.code }}"></option>
                                     {% endfor %}
                         </datalist>
                     </div>
@@ -37,8 +37,8 @@
                         <label class="col-form-label mt-4" for="to_curr">To currency:</label>
                         <input list="currencies_to" id="to_curr" type="text" placeholder="USD" name="to_curr">
                         <datalist id="currencies_to">
-                            {% for currency in all_currencies.keys %}
-                            <option value="{{ currency }}"></option>
+                            {% for currency in all_currencies %}
+                            <option value="{{ currency.code }}"></option>
                             {% endfor %}
                         </datalist>
                     </div>

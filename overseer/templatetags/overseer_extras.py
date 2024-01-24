@@ -11,10 +11,3 @@ def truncate(text):
 @register.inclusion_tag('overseer/pagination.html')
 def paginate(paginated_obj):
     return {'page_obj': paginated_obj}
-
-
-
-@register.inclusion_tag('overseer/pagination.html')
-def paginate(paginated_obj):
-    return {'page_obj': paginated_obj}
-

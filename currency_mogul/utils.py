@@ -13,9 +13,12 @@ def plot_currency(historical_dict):
         for rate in historical_dict['rates'][kp]:
             y_data.append(historical_dict['rates'][kp].get(rate))
     fig, ax = plt.subplots()
-    print(x_data)
-    print(y_data)
     ax.plot(x_data, y_data)
+    plt.title(f'{historical_dict["amount"]} {historical_dict["base"]}', loc='left')
+    plt.xlabel('Time')
+    plt.ylabel('Rate')
+    plt.grid(axis='y')
+    plt.xticks(rotation=25)
     plt.savefig(historic_graph_path)
 
 

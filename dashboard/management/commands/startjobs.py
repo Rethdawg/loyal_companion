@@ -1,6 +1,8 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from dashboard.models import FeedEntry, SteamGameFeed, WebsiteFeed
+from currency_mogul.models import Currency
+from currency_mogul.api_utils import all_currencies
 import feedparser
 from dateutil import parser
 import logging
@@ -10,6 +12,18 @@ from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 
 logger = logging.getLogger(__name__)
+
+
+def refresh_currency_list():
+    """
+    Refreshes the Currency table in the DB by updating it from a currency list called from the Frankfurter API.
+    :return: None
+    """
+    for key, value in all_currencies.items():
+        if not Currency.objects.filter(name__icontains=value).exists():
+            new_currency = Currency(name=value,
+                                    code=key)
+            new_currency.save()
 
 
 def save_new_entry(feed: feedparser) -> None:
@@ -72,6 +86,8 @@ class Command(BaseCommand):
         fetch_website_news()
         scheduler = BlockingScheduler(timezone=settings.TIME_ZONE)
         scheduler.add_jobstore(DjangoJobStore(), 'default')
+        refresh_currency_list()
+        logger.info('Refreshing currencies...')
 
         scheduler.add_job(
             fetch_steam_news,
