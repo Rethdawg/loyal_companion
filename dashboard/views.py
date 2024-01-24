@@ -1,9 +1,13 @@
 from django.shortcuts import render
-from .models import FeedEntry
+from django.urls import reverse_lazy
+from .models import FeedEntry, CitiesForWeather
+from .forms import CitiesForWeatherForm
 from memory_crystal.models import Memo
 from overseer.models import Task
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.views import generic
+from .utils import add_or_renew_tracked_forecast
 # Create your views here.
 
 
@@ -22,9 +26,42 @@ def homepage(request):
     recent_memos = Memo.objects.all().order_by('-last_modified')[:5]
     # To-Do List context
     task_list = [task for task in Task.objects.all() if task.severity == 'danger' or task.severity == 'warning']
+    # Weather context
+    tracked_cities = CitiesForWeather.objects.all()
+    if len(tracked_cities) == 1:
+        weather_forecasts = [add_or_renew_tracked_forecast(request, tracked_cities[0])]
+    elif len(tracked_cities) == 0:
+        weather_forecasts = []
+    else:
+        weather_forecasts = []
+        for tracked_city in CitiesForWeather.objects.all():
+            weather_forecasts.append(
+                add_or_renew_tracked_forecast(request, tracked_city)
+            )
+    print(weather_forecasts)
+    # Form context
+    city_form = CitiesForWeatherForm
+    # Tracked City context
+    tracked_cities = CitiesForWeather.objects.all()
     context = {
         'all_entries': paged_entries,
         'recent_memos': recent_memos,
-        'task_list': task_list
+        'task_list': task_list,
+        'weather_forecasts': weather_forecasts,
+        'city_form': city_form,
+        'tracked_cities': tracked_cities
     }
     return render(request, 'dashboard/homepage.html', context=context)
+
+
+class CityForWeatherCreateView(generic.CreateView):
+    model = CitiesForWeather
+    template_name = 'dashboard/homepage.html'
+    success_url = reverse_lazy('homepage')
+    form_class = CitiesForWeatherForm
+
+
+class CityForWeatherDeleteView(generic.DeleteView):
+    model = CitiesForWeather
+    template_name = 'dashboard/homepage.html'
+    success_url = reverse_lazy('homepage')

@@ -1,5 +1,4 @@
 from django.db import models
-
 # Create your models here.
 
 
@@ -50,3 +49,10 @@ class WebsiteFeed(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class CitiesForWeather(models.Model):
+    city_country = models.CharField(max_length=100, verbose_name='City')
+
+    def __str__(self):
+        return self.city_country

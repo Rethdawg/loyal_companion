@@ -10,15 +10,16 @@ def check_and_renew_forecast_status(latlon: dict[str:str]) -> bool:
     :param latlon: dictionary of lattitude and longitude
     :return: bool
     """
-    old_forecast = WeatherForecast.objects.filter(
+    old_forecasts = WeatherForecast.objects.filter(
         coordinate=(latlon['lat'], latlon['lon'])
     )
-    if old_forecast.exists():
-        if old_forecast.is_outdated:
-            old_forecast.delete()
-            return False
-        else:
-            return True
+    if old_forecasts.exists():
+        for old_forecast in old_forecasts:
+            if old_forecast.is_outdated:
+                old_forecast.delete()
+                return False
+            else:
+                return True
     else:
         return False
 

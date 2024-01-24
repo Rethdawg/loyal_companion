@@ -4,8 +4,48 @@
 <br>
 <div class="container">
     <div class="row">
-        <div class="col-12">
-
+        <div class="col-9">
+            {% for weather_forecast_query in weather_forecasts %}
+            {% for forecast in weather_forecast_query %}
+            <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+              <div class="card-header">
+                <b>Forecast</b>
+              </div>
+                <div class="card-body">
+                    <h5><span class="badge badge-primary"></span> {{ forecast.type }}<img
+                          src="http://openweathermap.org/img/w/{{ forecast.icon }}.png" alt="Image" style="width:70px"></h5>
+                    <h5><span class="badge badge-primary"></span> {{ forecast.temperature }}°C</h5>
+                    <h5><span class="badge badge-primary"></span> {{ forecast.pub_date }}</h5>
+                    <h5><span class="badge badge-primary"></span><a href="https://openweathermap.org/city{{ forecast.city_id }}">
+                        {{ forecast.city_country }}</a></h5>
+                </div>
+            </div>
+            {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="col-1">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="tracked_cities_remove" data-bs-toggle="dropdown">
+                Remove city...
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="tracked_cities_remove">
+                {% for city in tracked_cities %}
+                <li>
+                    <form method="post" action="{% url 'city-delete' city.id %}">
+                        {% csrf_token %}
+                        <button type="submit"> {{ city }}</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-1">
+        </div>
+        <div class="col-1">
+            <form action="{% url 'city-create' %}" method="post">
+                {% csrf_token %}
+                {{ city_form }}
+                <input type="submit" class="btn btn-primary" value="Add">
+            </form>
         </div>
     </div>
     <div class="row">
