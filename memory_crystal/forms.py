@@ -3,10 +3,10 @@ from .models import Memo, Category, Birthday, BirthdayNote
 from tinymce.widgets import TinyMCE
 
 
-class BaseMemoFormset(forms.BaseFormSet):
-    def add_fields(self, form, index):
-        super().add_fields(form, index)
-        form.fields['new category'] = forms.CharField(max_length=200, required=False)
+# class BaseMemoFormset(forms.BaseFormSet):
+#     def add_fields(self, form, index):
+#         super().add_fields(form, index)
+#         form.fields['new category'] = forms.CharField(max_length=200, required=False)
 
 
 class MemoForm(forms.ModelForm):

@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_list_or_404, reverse
 from django.urls import reverse_lazy
 from .models import BirthdayNote, Birthday, Memo, Category
-from .forms import MemoForm, CategoryForm, BirthdayForm, BirthdayNoteForm, MemoFormSet
+from .forms import MemoForm, CategoryForm, BirthdayForm, BirthdayNoteForm
 from django.contrib import messages
 from django.views import generic
 from django.views.generic.edit import FormMixin
@@ -223,6 +223,9 @@ class BirthdayNoteDeleteView(generic.DeleteView):
 
 
 class CategoryCreateView(generic.CreateView):
+    """
+    Class-based view responsible for creating new categories.
+    """
     model = Category
     form_class = CategoryForm
     template_name = 'memory_crystal/category_update_form.html'
@@ -230,12 +233,20 @@ class CategoryCreateView(generic.CreateView):
 
 
 class CategoryDeleteView(generic.DeleteView):
+    """
+    Class-based view responsible for deleting categories.
+    """
     model = Category
     template_name = 'memory_crystal/category_list.html'
     success_url = reverse_lazy('memory-index')
 
 
 def search(request):
+    """
+    Function responsible for search functionality and page rendering
+    :param request: request object
+    :return: search page render
+    """
     query_text = request.GET['search_text']
     search_results = Memo.objects.filter(Q(title__icontains=query_text) |
                                          Q(category__name__icontains=query_text)
