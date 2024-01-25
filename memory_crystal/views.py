@@ -23,21 +23,14 @@ def index(request):
                 content=form_data.cleaned_data['content'],
             )
             new_memo.save()
-            if form_data.cleaned_data['new category']:
-                new_category = Category(
-                    name=form_data.cleaned_data['new category']
-                )
-                new_category.save()
-                new_memo.category.set(new_category)
-            else:
+            if form_data.cleaned_data['category']:
                 new_memo.category.set(form_data.cleaned_data['category'])
-
             messages.success(request, 'Memo created!')
             return redirect('memo-detail', slug=new_memo.slug)
         else:
             messages.error(request, 'An error had occured.')
             return redirect('memory-index')
-    np_form = MemoFormSet
+    np_form = MemoForm
     recent_memos = Memo.objects.all().order_by('-last_modified')[:5]
     all_categories = Category.objects.all()
     ordered_birthdays = Birthday.objects.all().order_by('bdate')
@@ -228,4 +221,16 @@ class BirthdayNoteDeleteView(generic.DeleteView):
         return reverse('birthday-detail', kwargs={'pk': self.get_object().id})
 
 
-# class CategoryCreateView(generic.CreateView):
+class CategoryCreateView(generic.CreateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'memory_crystal/category_update_form.html'
+    success_url = reverse_lazy('memory-index')
+
+
+class CategoryDeleteView(generic.DeleteView):
+    model = Category
+    template_name = 'memory_crystal/index.html'
+
+    def get_success_url(self):
+        return redirect()

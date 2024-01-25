@@ -1,5 +1,5 @@
 from django import forms
-from .models import *
+from .models import Task, SubTask
 from tinymce.widgets import TinyMCE
 
 
@@ -10,6 +10,10 @@ class TaskForm(forms.ModelForm):
         widgets = {
             'pub_date': forms.HiddenInput
         }
+
+
+TaskFormSet = forms.inlineformset_factory(Task, SubTask,
+                                          fields=('title', 'due_date', 'content', 'status'))
 
 
 class SubtaskForm(forms.ModelForm):

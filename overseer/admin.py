@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import RenewableTask, Task, SubTask
+from .models import Task, SubTask
 # Register your models here.
 
 
@@ -20,12 +20,5 @@ class SubTaskAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'pub_date', 'status', 'due_date')
 
 
-class RenewableTaskAdmin(admin.ModelAdmin):
-    search_fields = ('title',)
-    readonly_fields = ('id',)
-    list_display = ('id', 'title', 'pub_date', 'due_date')
-
-
 admin.site.register(Task, TaskAdmin)
 admin.site.register(SubTask, SubTaskAdmin)
-admin.site.register(RenewableTask, RenewableTaskAdmin)

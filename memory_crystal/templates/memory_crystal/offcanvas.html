@@ -13,9 +13,14 @@
         {% for category in all_categories %}
         <li>
           <a href="{% url 'memo-category' category.name %}"> {{ category }}</a>
+          <form action="{% url 'category-delete' category.id %}">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-danger btn-sm" value="Delete">
+          </form>
         </li>
         {% endfor %}
       </ul>
+      <a type="button" class="btn btn-primary" href="{% url 'category-create' %}">Add new category</a>
     </div>
   </div>
 </div>
