@@ -22,7 +22,11 @@ class WeatherForecast(models.Model):
         return f'{self.city_country} at {self.pub_date}'
 
     @property
-    def is_outdated(self):
+    def is_outdated(self) -> bool:
+        """
+        This property function determines if the WeatherForecast instance is older than an hour.
+        :return:
+        """
         time_difference = timezone.now() - self.pub_date
         if time_difference > timezone.timedelta(minutes=59, seconds=59):
             return True

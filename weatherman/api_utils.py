@@ -42,6 +42,13 @@ ENDPOINT_OWM = 'weather?'
 
 
 def create_or_retrieve_forecast(latlon: dict[str:str]) -> WeatherForecast | None:
+    """
+    This function checks whether a forecast with the provided coordinates exists within the database using the
+    check_forecat_presence function. If it does, it retrieves it as a QueryObject, if it does not, it firts creates
+    it using the OpenWeatherMap API, saves it, then retrieves it.
+    :param latlon: dict
+    :return: WeatherForecast obj or None
+    """
     if check_forecast_presence(latlon):
         return WeatherForecast.objects.filter(
             coordinate=(latlon['lat'], latlon['lon'])

@@ -4,6 +4,9 @@ from .models import WeatherForecast
 
 
 class WeatherForecastAdmin(admin.ModelAdmin):
+    """
+    Class that edits WeatherForecast instances' display in the admin panel.
+    """
     model = WeatherForecast
     list_display = ('city_country', 'pub_date')
 
