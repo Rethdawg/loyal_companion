@@ -3,23 +3,17 @@ from .models import WeatherForecast
 from django.utils import timezone
 
 
-def check_and_renew_forecast_status(latlon: dict[str:str]) -> bool:
+def check_forecast_presence(latlon: dict[str:str]) -> bool:
     """
-    This function checks if a WeatherForecast instance with a matching coordinate exists
-    and if it is outdated. If it is outdated, it deletes the forecast.
-    :param latlon: dictionary of lattitude and longitude
+    Checks if a forecast with a provided lattitude and longitude setting exists within the database. Returns True if it
+    does, False if it does not.
+    :param latlon: dict[str:str]
     :return: bool
     """
     old_forecasts = WeatherForecast.objects.filter(
         coordinate=(latlon['lat'], latlon['lon'])
     )
     if old_forecasts.exists():
-        for old_forecast in old_forecasts:
-            if old_forecast.is_outdated:
-                old_forecast.delete()
-                return False
-            else:
-                return True
+        return True
     else:
         return False
-

@@ -1,5 +1,16 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+from weatherman.api_utils import get_latlon_from_city
+from django.utils.translation import gettext_lazy as _
 # Create your models here.
+
+
+def validate_city_country(city_country):
+    if get_latlon_from_city(city_country) is None:
+        raise ValidationError(
+            _('%(city_country)s is not a valid location.'),
+            params={'city_country': city_country},
+        )
 
 
 class FeedEntry(models.Model):
@@ -55,7 +66,7 @@ class CitiesForWeather(models.Model):
     """
     Class that describes cities tracked for weather forecast display on the dashboard.
     """
-    city_country = models.CharField(max_length=100, verbose_name='City')
+    city_country = models.CharField(max_length=100, verbose_name='City', validators=[validate_city_country])
 
     def __str__(self):
         return self.city_country

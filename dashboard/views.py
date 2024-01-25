@@ -7,7 +7,8 @@ from overseer.models import Task
 from django.core.paginator import Paginator
 from currency_mogul.api_utils import show_all_rates
 from django.views import generic
-from .utils import add_or_renew_tracked_forecast
+from .utils import retrieve_all_tracked_forecasts
+from django.contrib import messages
 # Create your views here.
 
 
@@ -26,17 +27,12 @@ def homepage(request):
     recent_memos = Memo.objects.all().order_by('-last_modified')[:5]
     # To-Do List context
     task_list = [task for task in Task.objects.all() if task.severity == 'danger' or task.severity == 'warning']
-    # Weather context
+    # Tracked citied context
     tracked_cities = CitiesForWeather.objects.all()
-    if len(tracked_cities) == 1:
-        weather_forecasts = [tc for tc in add_or_renew_tracked_forecast(request, tracked_cities)]
-    elif len(tracked_cities) == 0:
+    # Weather context
+    weather_forecasts = retrieve_all_tracked_forecasts()
+    if weather_forecasts is None:
         weather_forecasts = []
-    else:
-        weather_forecasts = []
-        for tracked_city in CitiesForWeather.objects.all():
-            for tc in add_or_renew_tracked_forecast(request, tracked_city):
-                weather_forecasts.append(tc)
     # Form context
     city_form = CitiesForWeatherForm
     # Currency context
@@ -61,6 +57,10 @@ class CityForWeatherCreateView(generic.CreateView):
     template_name = 'dashboard/homepage.html'
     success_url = reverse_lazy('homepage')
     form_class = CitiesForWeatherForm
+
+    def form_invalid(self, form, *args, **kwargs):
+        messages.error(self.request, 'Location not found.')
+        return homepage(self.request)
 
 
 class CityForWeatherDeleteView(generic.DeleteView):

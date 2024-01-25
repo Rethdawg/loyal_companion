@@ -2,7 +2,8 @@
 import requests as reqs
 from .models import WeatherForecast
 from .secrets import secrets
-from .utils import check_and_renew_forecast_status
+from .utils import check_forecast_presence
+import logging
 # Nominatim search
 
 HOST_NOM = 'https://nominatim.openstreetmap.org/search?'
@@ -40,9 +41,9 @@ HOST_OWM = 'https://api.openweathermap.org/data/2.5/'
 ENDPOINT_OWM = 'weather?'
 
 
-def call_or_retrieve_forecast(latlon: dict[str:str]) -> WeatherForecast | None:
-    if check_and_renew_forecast_status(latlon):
-        forecast = WeatherForecast.objects.filter(
+def create_or_retrieve_forecast(latlon: dict[str:str]) -> WeatherForecast | None:
+    if check_forecast_presence(latlon):
+        return WeatherForecast.objects.filter(
             coordinate=(latlon['lat'], latlon['lon'])
         )
     else:
@@ -72,7 +73,11 @@ def call_or_retrieve_forecast(latlon: dict[str:str]) -> WeatherForecast | None:
 
                 )
                 forecast.save()
+                return WeatherForecast.objects.filter(city_country=forecast.city_country)
             except KeyError:
+                logging.error('No such location in OWM API')
                 return None
-    return forecast
 
+        else:
+            logging.error('OWM API not OK')
+            return None

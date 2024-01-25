@@ -4,6 +4,7 @@ from dashboard.models import FeedEntry, SteamGameFeed, WebsiteFeed
 from currency_mogul.models import Currency
 from currency_mogul.api_utils import all_currencies
 from memory_crystal.models import Birthday
+from weatherman.models import WeatherForecast
 import feedparser
 from dateutil import parser
 import logging
@@ -27,7 +28,7 @@ def refresh_currency_list():
             new_currency.save()
 
 
-def save_new_entry(feed: feedparser) -> None:
+def save_new_feed_entry(feed: feedparser) -> None:
     """
     Parses the given RSS feed and saves it as an entry in the database.
     :param feed: feedparser object
@@ -56,7 +57,17 @@ def fetch_steam_news() -> None:
     """
     for game in SteamGameFeed.objects.all():
         feed_obj = feedparser.parse(game.rss_link)
-        save_new_entry(feed_obj)
+        save_new_feed_entry(feed_obj)
+
+
+def delete_old_forecasts() -> None:
+    """
+    Checks if any forecasts within the databse are older than an hour. If they are, deletes them.
+    :return: None
+    """
+    for forecast in WeatherForecast.objects.all():
+        if forecast.is_outdated:
+            forecast.delete()
 
 
 def fetch_website_news():
@@ -66,7 +77,7 @@ def fetch_website_news():
     """
     for website in WebsiteFeed.objects.all():
         feed_obj = feedparser.parse(website.rss_link)
-        save_new_entry(feed_obj)
+        save_new_feed_entry(feed_obj)
 
 
 def delete_old_entries(max_age=604_800):
@@ -93,10 +104,21 @@ class Command(BaseCommand):
     Custom command class used for setting up apscheduler jobs.
     """
     def handle(self, *args, **options):
+        delete_old_forecasts()
         fetch_steam_news()
         fetch_website_news()
         scheduler = BlockingScheduler(timezone=settings.TIME_ZONE)
         scheduler.add_jobstore(DjangoJobStore(), 'default')
+
+        scheduler.add_job(
+            delete_old_forecasts,
+            trigger='interval',
+            minutes=59,
+            id='Old Forecast Clean-up',
+            max_instances=1,
+            replace_existing=True
+        )
+        logger.info('Added job: Old Forecast Clean-up')
 
         scheduler.add_job(
             fetch_steam_news,
