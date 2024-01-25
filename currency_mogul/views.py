@@ -1,12 +1,16 @@
 from django.shortcuts import render
-from .api_utils import *
+from .api_utils import show_historical, show_all_rates, convert_currency
 from .utils import clear_graph
 from .models import Currency
-
 # Create your views here.
 
 
 def index(request):
+    """
+    Function that displays the index page of the app.
+    :param request: request object
+    :return: index render
+    """
     context = {
         'all_currencies': Currency.objects.all()
     }
@@ -24,6 +28,11 @@ def index(request):
 
 
 def historical_graph(request):
+    """
+    Function that controls the display of the historical graph page.
+    :param request: request object
+    :return: renders historical graph
+    """
     context = {
         'all_currencies': Currency.objects.all()
     }
@@ -46,6 +55,11 @@ def historical_graph(request):
 
 
 def converter(request):
+    """
+    Function responsible for showing the currency conversion page.
+    :param request: request object
+    :return: render currency converter page
+    """
     context = {
         'all_currencies': Currency.objects.all()
     }

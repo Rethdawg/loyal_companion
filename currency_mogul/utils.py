@@ -5,7 +5,12 @@ from pathlib import Path
 historic_graph_path = 'currency_mogul/static/images/historical.png'
 
 
-def plot_currency(historical_dict):
+def plot_currency(historical_dict) -> None:
+    """
+    Receives a JSON and plots a historical currency graph from it.
+    :param historical_dict:
+    :return: None
+    """
     x_data = []
     y_data = []
     for kp in historical_dict['rates']:
@@ -22,5 +27,9 @@ def plot_currency(historical_dict):
     plt.savefig(historic_graph_path)
 
 
-def clear_graph():
+def clear_graph() -> None:
+    """
+    Deletes old graph.
+    :return: None
+    """
     Path(historic_graph_path).unlink(missing_ok=True)

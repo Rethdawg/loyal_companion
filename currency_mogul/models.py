@@ -4,6 +4,9 @@ from django.db import models
 
 
 class Currency(models.Model):
+    """
+    Class that describes the currency model.
+    """
     name = models.CharField(max_length=100, unique=True)
     code = models.CharField(max_length=3, unique=True)
 

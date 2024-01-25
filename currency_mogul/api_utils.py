@@ -8,7 +8,13 @@ ENDPOINT_CURRENCIES = '/currencies'
 all_currencies = reqs.get(HOST_FRANKFURTER + ENDPOINT_CURRENCIES).json()
 
 
-def show_all_rates(amount=1, from_curr='EUR'):
+def show_all_rates(amount: float = 1, from_curr: str = 'EUR') -> dict:
+    """
+    Retrieves all rates from the frankfurter API. If there is no response, returns an empty dictionary.
+    :param amount: float
+    :param from_curr: str
+    :return: dict
+    """
     payload = {
         'amount': amount,
         'from': from_curr
@@ -17,11 +23,15 @@ def show_all_rates(amount=1, from_curr='EUR'):
     if frankfurter_r.ok:
         money_dict = frankfurter_r.json()
     else:
-        money_dict = None
+        money_dict = {}
     return money_dict
 
 
-def show_latest_relevant_rates():
+def show_latest_relevant_rates() -> dict:
+    """
+    Function that fetches all rates via the show_all_rates() command, then retrieves a smaller subset of the data.
+    :return: dict
+    """
     money_dict = show_all_rates()
     if money_dict:
         relevant_rates = {
@@ -32,11 +42,18 @@ def show_latest_relevant_rates():
             'CNY, chinese yuan renminbi': money_dict['rates']['CNY']
         }
     else:
-        relevant_rates = None
+        relevant_rates = {}
     return relevant_rates
 
 
-def convert_currency(from_cur, to_cur, amount):
+def convert_currency(from_cur: str, to_cur: str, amount: float) -> dict:
+    """
+    Converts currency via the Frankfurter API.
+    :param from_cur: str
+    :param to_cur: str
+    :param amount: float
+    :return: dict
+    """
     payload = {
         'from': from_cur,
         'to': to_cur,
@@ -51,11 +68,20 @@ def convert_currency(from_cur, to_cur, amount):
             'amount': frankfurter_r['rates'][to_cur]
         }
     else:
-        money_dict = None
+        money_dict = {}
     return money_dict
 
 
-def show_historical(from_time, to_time, from_cur, to_cur, amount):
+def show_historical(from_time: str, to_time: str, from_cur: str, to_cur: str, amount: float) -> None:
+    """
+    Receives a set of values and uses them to call the Frankfurter api for historical rates.
+    :param from_time: str
+    :param to_time: str
+    :param from_cur: str
+    :param to_cur: str
+    :param amount: float
+    :return:
+    """
     payload = {
         'from': from_cur,
         'to': to_cur,

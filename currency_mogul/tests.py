@@ -10,7 +10,7 @@ class IndexViewTests(TestCase):
     def test_default_view(self):
         """
         Testing to see if the page is available.
-        :return:
+        :return:None
         """
         response = self.client.get(reverse('currency-index'))
         self.assertEqual(response.status_code, 200)
@@ -18,10 +18,18 @@ class IndexViewTests(TestCase):
 
 class HistoricalViewTests(TestCase):
     def test_if_no_graph(self):
+        """
+        Testing to see if the page doesn't load an old graph.
+        :return:None
+        """
         response = self.client.get(reverse('currency-historical'))
         self.assertContains(response, 'Generate a graph!', status_code=200)
 
     def test_if_graph(self):
+        """
+        Testing to see if the page accepts the context and displays it.
+        :return:None
+        """
         test_context = {
             'from_curr': 'EUR',
             'to_curr': 'USD',
@@ -39,11 +47,14 @@ class HistoricalViewTests(TestCase):
 
 class ConverterViewTest(TestCase):
     def test_if_converts(self):
+        """
+        Checking to see if the conversion goes through.
+        :return:None
+        """
         test_context = {
             'from_curr': 'EUR',
             'to_curr': 'USD',
             'amount': 100,
-            'posting': True
         }
         response = self.client.post(reverse('currency-converter'), data=test_context)
         self.assertEquals(response.status_code, 200)
