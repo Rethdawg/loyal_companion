@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_list_or_404, reverse
 from django.urls import reverse_lazy
 from .models import BirthdayNote, Birthday, Memo, Category
@@ -230,7 +231,17 @@ class CategoryCreateView(generic.CreateView):
 
 class CategoryDeleteView(generic.DeleteView):
     model = Category
-    template_name = 'memory_crystal/index.html'
+    template_name = 'memory_crystal/category_list.html'
+    success_url = reverse_lazy('memory-index')
 
-    def get_success_url(self):
-        return redirect()
+
+def search(request):
+    query_text = request.GET['search_text']
+    search_results = Memo.objects.filter(Q(title__icontains=query_text) |
+                                         Q(category__name__icontains=query_text)
+                                         )
+    context = {
+        'search_results': search_results,
+        'query_text': query_text
+    }
+    return render(request, 'memory_crystal/search.html', context=context)

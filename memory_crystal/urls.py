@@ -15,5 +15,6 @@ urlpatterns = [
     path('birthday/<int:pk>/edit', views.BirthdayUpdateView.as_view(), name='birthday-edit'),
     path('birthday/<int:pk>/delete', views.BirthdayDeleteView.as_view(), name='birthday-delete'),
     path('birthdaynotes/<int:pk>/edit', views.BirthdayNoteUpdateView.as_view(), name='birthdaynote-edit'),
-    path('birthdaynotes/<int:pk>/delete', views.BirthdayNoteDeleteView.as_view(), name='birthdaynote-delete')
+    path('birthdaynotes/<int:pk>/delete', views.BirthdayNoteDeleteView.as_view(), name='birthdaynote-delete'),
+    path('search/', views.search, name='memo-search')
 ]
