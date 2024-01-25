@@ -4,6 +4,9 @@ from tinymce.widgets import TinyMCE
 
 
 class TaskForm(forms.ModelForm):
+    """
+    Class describing the form used for Task instances.
+    """
     class Meta:
         model = Task
         fields = ('title', 'due_date')
@@ -17,6 +20,9 @@ TaskFormSet = forms.inlineformset_factory(Task, SubTask,
 
 
 class SubtaskForm(forms.ModelForm):
+    """
+    Class describing the form used for Subtask instances.
+    """
     class Meta:
         model = SubTask
         fields = ('title', 'due_date', 'status', 'content',)

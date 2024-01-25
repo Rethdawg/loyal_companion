@@ -5,6 +5,9 @@ from django.utils import timezone
 
 
 class Task(models.Model):
+    """
+    Class describing the Task model.
+    """
     title = models.CharField(max_length=200)
     pub_date = models.DateTimeField(verbose_name='Creation date', auto_now_add=True)
     due_date = models.DateTimeField(verbose_name='Due date')
@@ -16,7 +19,12 @@ class Task(models.Model):
         ordering = ['due_date']
 
     @property
-    def severity(self):
+    def severity(self) -> str:
+        """
+        This property function determines the tasks severity by calculating the difference in days between its due date
+        and current server time. The less days, the more severe.
+        :return: str
+        """
         remaining_days = self.due_date - timezone.now()
         if remaining_days <= timezone.timedelta(days=0):
             return 'danger'
@@ -28,19 +36,31 @@ class Task(models.Model):
             return 'light'
 
     @property
-    def progress(self):
+    def progress(self) -> int:
+        """
+        This property function assigns a numerical 'progress' value based on how many child Subtask instances are
+        marked with the status Complete.
+        :return: int
+        """
         progress = 0
         for subtask in self.subtasks.all():
             progress += 1 if subtask.status == 'C' else 0
         return progress
 
     @property
-    def progress_percentage(self):
+    def progress_percentage(self) -> str:
+        """
+        This property function determines the completion percentage based on Subtask instance amount and status.
+        :return: str
+        """
         subtask_num = self.subtasks.all().count() if self.subtasks.all().count() != 0 else 1
         return str(round(100 / subtask_num * self.progress, 2)) + '%'
 
 
 class SubTask(models.Model):
+    """
+    Class descriving the Subtask model.
+    """
     title = models.CharField(max_length=100)
     pub_date = models.DateTimeField(verbose_name='Creation date', auto_now_add=True)
     due_date = models.DateTimeField(verbose_name='Due date')
@@ -54,7 +74,12 @@ class SubTask(models.Model):
     main_task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='subtasks')
 
     @property
-    def severity(self):
+    def severity(self) -> str:
+        """
+        This property function determines the Subtask's severity by calculating the difference in days between its due
+        date and current server time. The less days, the more severe.
+        :return: str
+        """
         remaining_days = self.due_date - timezone.now()
         if remaining_days <= timezone.timedelta(days=0):
             return 'danger'
