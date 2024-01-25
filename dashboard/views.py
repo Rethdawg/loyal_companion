@@ -53,17 +53,30 @@ def homepage(request):
 
 
 class CityForWeatherCreateView(generic.CreateView):
+    """
+    Class-based view for creating new tracked city instances.
+    """
     model = CitiesForWeather
     template_name = 'dashboard/homepage.html'
     success_url = reverse_lazy('homepage')
     form_class = CitiesForWeatherForm
 
     def form_invalid(self, form, *args, **kwargs):
+        """
+        Update to the form_invalid() function to allow for 'Location not found' error messaging.
+        :param form: form object
+        :param args: args
+        :param kwargs: kwargs
+        :return: homepage render
+        """
         messages.error(self.request, 'Location not found.')
         return homepage(self.request)
 
 
 class CityForWeatherDeleteView(generic.DeleteView):
+    """
+    Class-based view responsible for deleting tracked city instances.
+    """
     model = CitiesForWeather
     template_name = 'dashboard/homepage.html'
     success_url = reverse_lazy('homepage')
