@@ -41,35 +41,15 @@
                     </thead>
                     <tbody>
                     {% for subtask in task.subtasks.all %}
-                    <tr class="table-{{ subtask.severity }}">
+                    <tr class="table-{% if subtask.status == 'C' %}success{% else %}{{ subtask.severity }}{% endif %}">
                         <th scope="row">{{ subtask.title }}</th>
                         <td>{{ subtask.due_date }}</td>
                         <td>{{ subtask.status }}</td>
                         <td>
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">. . .</a>
                             <div class="dropdown-menu" style="">
-                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-content">View content</a>
                                 <a class="dropdown-item" href="{% url 'subtask-edit' subtask.id %}">Edit</a>
                                 <a class="dropdown-item" href="{% url 'subtask-delete' subtask.id %}">Delete</a>
-                            </div>
-                            <!--View Content Modal-->
-                            <div class="modal" id="modal-content">
-                              <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h5 class="modal-title">Subtask content</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                      <span aria-hidden="true"></span>
-                                    </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <p>{{ subtask.content | safe }}</p>
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                  </div>
-                                </div>
-                              </div>
                             </div>
                         </td>
                     </tr>

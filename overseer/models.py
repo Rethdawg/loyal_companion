@@ -44,7 +44,7 @@ class SubTask(models.Model):
     title = models.CharField(max_length=100)
     pub_date = models.DateTimeField(verbose_name='Creation date', auto_now_add=True)
     due_date = models.DateTimeField(verbose_name='Due date')
-    content = HTMLField()
+    content = HTMLField(null=True, blank=True)
     STATUS_LIST = (
         ('O', 'Ongoing'),
         ('C', 'Complete'),

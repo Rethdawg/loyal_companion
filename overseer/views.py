@@ -61,7 +61,7 @@ class TaskUpdateView(generic.UpdateView):
     template_name = 'overseer/task_update_form.html'
 
     def get_success_url(self):
-        return reverse('task-edit', kwargs={'pk': self.object.id})
+        return reverse('task-detail', kwargs={'pk': self.object.id})
 
 
 class TaskDeleteView(generic.DeleteView):
