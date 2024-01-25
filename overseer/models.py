@@ -7,7 +7,7 @@ from django.utils import timezone
 class Task(models.Model):
     title = models.CharField(max_length=200)
     pub_date = models.DateTimeField(verbose_name='Creation date', auto_now_add=True)
-    due_date = models.DateField(verbose_name='Due date')
+    due_date = models.DateTimeField(verbose_name='Due date')
 
     def __str__(self):
         return f'{self.title}'
@@ -17,7 +17,7 @@ class Task(models.Model):
 
     @property
     def severity(self):
-        remaining_days = self.due_date - timezone.now().date()
+        remaining_days = self.due_date - timezone.now()
         if remaining_days <= timezone.timedelta(days=0):
             return 'danger'
         elif remaining_days <= timezone.timedelta(days=7):
@@ -43,7 +43,7 @@ class Task(models.Model):
 class SubTask(models.Model):
     title = models.CharField(max_length=100)
     pub_date = models.DateTimeField(verbose_name='Creation date', auto_now_add=True)
-    due_date = models.DateField(verbose_name='Due date')
+    due_date = models.DateTimeField(verbose_name='Due date')
     content = HTMLField()
     STATUS_LIST = (
         ('O', 'Ongoing'),
@@ -55,7 +55,7 @@ class SubTask(models.Model):
 
     @property
     def severity(self):
-        remaining_days = self.due_date - timezone.now().date()
+        remaining_days = self.due_date - timezone.now()
         if remaining_days <= timezone.timedelta(days=0):
             return 'danger'
         elif remaining_days <= timezone.timedelta(days=7):
@@ -67,19 +67,6 @@ class SubTask(models.Model):
 
     def __str__(self):
         return f'{self.title}, due on {self.due_date}'
-
-    class Meta:
-        ordering = ['due_date']
-
-
-class RenewableTask(models.Model):
-    title = models.CharField(max_length=200)
-    pub_date = models.DateTimeField(verbose_name='Creation date', auto_now_add=True)
-    due_date = models.DateField(verbose_name='Due date')
-    renew_time = models.IntegerField(verbose_name='Renewal time', default=7)
-
-    def __str__(self):
-        return f'{self.title}'
 
     class Meta:
         ordering = ['due_date']

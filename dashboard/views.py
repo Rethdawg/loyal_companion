@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from .models import FeedEntry, CitiesForWeather
 from .forms import CitiesForWeatherForm
-from memory_crystal.models import Memo
+from memory_crystal.models import Memo, Birthday
 from overseer.models import Task
 from django.core.paginator import Paginator
 from currency_mogul.api_utils import show_all_rates
@@ -41,6 +41,8 @@ def homepage(request):
     city_form = CitiesForWeatherForm
     # Currency context
     money_dict = show_all_rates()
+    # Birthday context
+    all_birthdays = Birthday.objects.all().order_by('-bdate')
     context = {
         'all_entries': paged_entries,
         'recent_memos': recent_memos,
@@ -48,7 +50,8 @@ def homepage(request):
         'weather_forecasts': weather_forecasts,
         'city_form': city_form,
         'tracked_cities': tracked_cities,
-        'money_dict': money_dict
+        'money_dict': money_dict,
+        'all_birthdays': all_birthdays
     }
     return render(request, 'dashboard/homepage.html', context=context)
 

@@ -3,6 +3,7 @@ from django.conf import settings
 from dashboard.models import FeedEntry, SteamGameFeed, WebsiteFeed
 from currency_mogul.models import Currency
 from currency_mogul.api_utils import all_currencies
+from memory_crystal.models import Birthday
 import feedparser
 from dateutil import parser
 import logging
@@ -77,6 +78,16 @@ def delete_old_entries(max_age=604_800):
     DjangoJobExecution.objects.delete_old_job_executions(max_age)
 
 
+def check_and_renew_birthdays() -> None:
+    """
+    Increment a Birthday instance bdate field by a year that returns True on its passed property.
+    :return: None
+    """
+    for birthday in Birthday.objects.all():
+        if birthday.passed:
+            birthday.renew_birthday()
+
+
 class Command(BaseCommand):
     """
     Custom command class used for setting up apscheduler jobs.
@@ -86,8 +97,6 @@ class Command(BaseCommand):
         fetch_website_news()
         scheduler = BlockingScheduler(timezone=settings.TIME_ZONE)
         scheduler.add_jobstore(DjangoJobStore(), 'default')
-        refresh_currency_list()
-        logger.info('Refreshing currencies...')
 
         scheduler.add_job(
             fetch_steam_news,
@@ -119,6 +128,29 @@ class Command(BaseCommand):
             replace_existing=True
         )
         logger.info('Added job: Delete Old News')
+
+        scheduler.add_job(
+            refresh_currency_list,
+            trigger=CronTrigger(
+                day_of_week='mon', hour='00', minute='00'
+            ),
+            id='Refresh currencies',
+            max_instances=1,
+            replace_existing=True
+        )
+        logger.info('Added job: Refresh currencies')
+
+        scheduler.add_job(
+            check_and_renew_birthdays,
+            trigger=CronTrigger(
+                hour=0, minute=0, second=1
+            ),
+            id='Check and increment birthdays',
+            max_instances=1,
+            replace_existing=True
+        )
+        logger.info('Added job: Check and increment birthdays')
+
         try:
             logger.info('Starting scheduler...')
             scheduler.start()

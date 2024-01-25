@@ -52,6 +52,9 @@ class WebsiteFeed(models.Model):
 
 
 class CitiesForWeather(models.Model):
+    """
+    Class that describes cities tracked for weather forecast display on the dashboard.
+    """
     city_country = models.CharField(max_length=100, verbose_name='City')
 
     def __str__(self):

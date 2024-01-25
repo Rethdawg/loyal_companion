@@ -3,13 +3,22 @@
 {% load dashboard_extras %}
 <br>
 <div class="container">
-    {% if alarms %}
     <div class="row">
+        <button class="badge bg-info">Active Reminders</button>
         <div class="col-12 d-flex flex-row">
-
+            {% for birthday in all_birthdays %}
+                {% if birthday.soon %}
+                <a href="{% url 'birthday-detail' birthday.id %}">
+                    <p class="text-{{ birthday.soon }}"><b>Birthday: {{ birthday }}</b></p>
+                </a>
+                <span class="badge rounded-pill bg-primary">!!!</span>
+                {% endif %}
+            {% endfor %}
+            <hr>
+            {% for task in task_list %}
+            {% endfor %}
         </div>
     </div>
-    {% endif %}
     <div class="row">
         <div class="col-9 d-flex flex-row">
             {% for forecast in weather_forecasts %}

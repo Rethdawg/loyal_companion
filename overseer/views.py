@@ -2,7 +2,7 @@ from django.shortcuts import render, reverse
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator
 from .forms import TaskForm, SubtaskForm
-from .models import Task, SubTask, RenewableTask
+from .models import Task, SubTask
 from django.views import generic
 from django.views.generic.edit import FormMixin
 # Create your views here.
