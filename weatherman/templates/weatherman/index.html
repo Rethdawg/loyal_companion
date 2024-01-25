@@ -21,10 +21,10 @@
     <a class="navbar-brand" href="#">
         <a class="navbar-brand" href="{% url 'homepage' %}">
           <svg xmlns="http://www.w3.org/2000/svg"
-               height="16"
-               width="16"
-               viewBox="0 0 512 512">
-            <path d="M168.5 72L256 165l87.5-93h-175zM383.9 99.1L311.5 176h129L383.9 99.1zm50 124.9H256 78.1L256 420.3 433.9 224zM71.5 176h129L128.1 99.1 71.5 176zm434.3 40.1l-232 256c-4.5 5-11 7.9-17.8 7.9s-13.2-2.9-17.8-7.9l-232-256c-7.7-8.5-8.3-21.2-1.5-30.4l112-152c4.5-6.1 11.7-9.8 19.3-9.8H376c7.6 0 14.8 3.6 19.3 9.8l112 152c6.8 9.2 6.1 21.9-1.5 30.4z"/>
+               height="32"
+               width="36"
+               viewBox="0 0 640 512">
+            <path d="M0 336c0 79.5 64.5 144 144 144H512c70.7 0 128-57.3 128-128c0-61.9-44-113.6-102.4-125.4c4.1-10.7 6.4-22.4 6.4-34.6c0-53-43-96-96-96c-19.7 0-38.1 6-53.3 16.2C367 64.2 315.3 32 256 32C167.6 32 96 103.6 96 192c0 2.7 .1 5.4 .2 8.1C40.2 219.8 0 273.2 0 336z"/>
           </svg> Weatherman
         </a>
     </a>
@@ -70,51 +70,53 @@
     {% endfor %}
   </div>
 </div>
-<div class="row">
-  <div class="col-12">
-    {% for forecast in all_forecasts %}
-    <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
-      <div class="card-header">
-        <b>Forecast</b>
-        <div class="float-end">
-          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">Delete</button>
+<div class="container">
+  <div class="row">
+    <div class="col-12 d-flex flex-row">
+      {% for forecast in all_forecasts %}
+      <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+        <div class="card-header">
+          <b>Forecast</b>
+          <div class="float-end">
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">Delete</button>
+          </div>
         </div>
-      </div>
-      <div class="card-body">
-        <h5><span class="badge badge-primary">Country Code :</span> {{ forecast.city_country }}</h5>
-        <h5><span class="badge badge-primary">Coordinates [X,Y] :</span> {{ forecast.coordinate }}</h5>
-        <h5><span class="badge badge-primary">Temperature in Celsius :</span> {{ forecast.temperature }}°C</h5>
-        <h5><span class="badge badge-primary">Pressure :</span> {{ forecast.pressure }} </h5>
-        <h5><span class="badge badge-primary">Humidity : </span> {{ forecast.humidity }}</h5>
-        <h5><span class="badge badge-primary">Forecast : </span> {{ forecast.type }} <img
-              src="http://openweathermap.org/img/w/{{ forecast.icon }}.png" alt="Image" style="width:70px"></h5>
-        <h5><span class="badge badge-primary">Description : </span> {{ forecast.description }}</h5>
-        <h5><span class="badge badge-primary">Description : </span> {{ forecast.pub_date }}</h5>
-        <h5><span class="badge badge-primary">More info:</span><a href="https://openweathermap.org/city/{{ forecast.city_id }}">
-            {{ forecast.city_country }}</a></h5>
-      </div>
-      <!-- Modal -->
-      <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              Delete forecast data?
-            </div>
-            <div class="modal-footer">
-              <form action="{% url 'weather-delete' forecast.id %}" method="post">
-                  {% csrf_token %}
-                  <input type="submit" class="btn btn-primary" value="Yes">
-              </form>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <div class="card-body">
+          <h5><span class="badge badge-primary">Country Code :</span> {{ forecast.city_country }}</h5>
+          <h5><span class="badge badge-primary">Coordinates [X,Y] :</span> {{ forecast.coordinate }}</h5>
+          <h5><span class="badge badge-primary">Temperature in Celsius :</span> {{ forecast.temperature }}°C</h5>
+          <h5><span class="badge badge-primary">Pressure :</span> {{ forecast.pressure }} </h5>
+          <h5><span class="badge badge-primary">Humidity : </span> {{ forecast.humidity }}</h5>
+          <h5><span class="badge badge-primary">Forecast : </span> {{ forecast.type }} <img
+                src="http://openweathermap.org/img/w/{{ forecast.icon }}.png" alt="Image" style="width:70px"></h5>
+          <h5><span class="badge badge-primary">Description : </span> {{ forecast.description }}</h5>
+          <h5><span class="badge badge-primary">Description : </span> {{ forecast.pub_date }}</h5>
+          <h5><span class="badge badge-primary">More info:</span><a href="https://openweathermap.org/city/{{ forecast.city_id }}">
+              {{ forecast.city_country }}</a></h5>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Delete forecast data?
+              </div>
+              <div class="modal-footer">
+                <form action="{% url 'weather-delete' forecast.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-primary" value="Yes">
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
             </div>
           </div>
         </div>
+      {% endfor %}
       </div>
-    {% endfor %}
     </div>
   </div>
 </div>
