@@ -121,7 +121,7 @@
                         </thead>
                         <tbody>
                         {% for subtask in task.subtasks.all %}
-                        <tr class="table-{{ subtask.severity }}">
+                        <tr class="table-{% if subtask.status == 'C' %}success{% else %}{{ subtask.severity }}{% endif %}">
                             <th scope="row">{{ subtask.title }}</th>
                             <td>{{ subtask.due_date }}</td>
                             <td>{{ subtask.status }}</td>
