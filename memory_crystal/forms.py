@@ -23,7 +23,7 @@ class MemoForm(forms.ModelForm):
         }
 
 
-MemoFormSet = forms.formset_factory(MemoForm,  formset=BaseMemoFormset)
+# MemoFormSet = forms.formset_factory(MemoForm,  formset=BaseMemoFormset)
 
 
 class CategoryForm(forms.ModelForm):

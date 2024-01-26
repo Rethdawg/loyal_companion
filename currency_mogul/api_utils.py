@@ -1,6 +1,7 @@
 # Module containing utilities on calling APIs, as well as their endpoints and keys
 import requests as reqs
 from .utils import plot_currency
+from django.contrib import messages
 
 HOST_FRANKFURTER = "http://api.frankfurter.app"
 ENDPOINT = '/latest'
@@ -72,9 +73,10 @@ def convert_currency(from_cur: str, to_cur: str, amount: float) -> dict:
     return money_dict
 
 
-def show_historical(from_time: str, to_time: str, from_cur: str, to_cur: str, amount: float) -> None:
+def show_historical(request, from_time: str, to_time: str, from_cur: str, to_cur: str, amount: float) -> None:
     """
     Receives a set of values and uses them to call the Frankfurter api for historical rates.
+    :param request: request obj
     :param from_time: str
     :param to_time: str
     :param from_cur: str
@@ -91,3 +93,6 @@ def show_historical(from_time: str, to_time: str, from_cur: str, to_cur: str, am
     if frankfurter_r.ok:
         historical_dict = frankfurter_r.json()
         plot_currency(historical_dict)
+    else:
+        messages.error(request, 'Bad response from the API. It is down, or the details you provided'
+                                'weren\'t valid.')

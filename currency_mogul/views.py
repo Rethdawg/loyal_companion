@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib import messages
 from .api_utils import show_historical, show_all_rates, convert_currency
 from .utils import clear_graph
 from .models import Currency
@@ -17,13 +18,18 @@ def index(request):
     if request.method == 'POST':
         amount = request.POST['from_amount']
         from_curr = request.POST['from_curr']
+        money_dict = show_all_rates(amount, from_curr)
         context.update({
             'money_dict': show_all_rates(amount, from_curr)
         })
     else:
+        money_dict = show_all_rates()
         context.update({
             'money_dict': show_all_rates()
         })
+    if not money_dict:
+        messages.error(request, 'Bad response from the API. It is down, or the details you provided'
+                                'weren\'t valid.')
     return render(request, 'currency_mogul/index.html', context=context)
 
 
@@ -67,7 +73,10 @@ def converter(request):
         from_curr = request.POST['from_curr']
         from_amount = request.POST['amount']
         to_curr = request.POST['to_curr']
-
+        money_dict = convert_currency(from_curr, to_curr, from_amount)
+        if not money_dict:
+            messages.error(request, 'Bad response from the API. It is down, or the details you provided'
+                                    'weren\'t valid.')
         context.update({
             'money_dict': convert_currency(from_curr, to_curr, from_amount),
             'from_amount': from_amount,
