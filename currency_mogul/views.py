@@ -56,7 +56,7 @@ def historical_graph(request):
             'from_date': from_date,
             'to_date': to_date,
         })
-        show_historical(from_date, to_date, from_curr, to_curr, amount)
+        show_historical(request, from_time=from_date, to_time=to_date, from_cur=from_curr, to_cur=to_curr, amount=amount)
     return render(request, 'currency_mogul/historical-rates.html', context=context)
 
 
