@@ -37,3 +37,5 @@ The app still requires some work and improvement. Particular areas of focus to i
   Some visual bugs are still present and need some patching up. Introduction of more modals and less redirects may be necessary to make the app more user-friendly and less annoying to use on slower networks/hardware.
 - Optimisation and code standartisation.
   While working on this I had experimented a lot. Some modules may use slightly different logic in the code, be less optimal in implementing their functionality, for example some views as a function may be better served being transformed into class-based views and vice-   versa. It would improve readability and make the app easier to maintain if everything was standartised and some operations were optimised.
+
+Note that while there is an API key hardcoded into the app, it is an inactive placeholder. To use this app, you must generate your own.
